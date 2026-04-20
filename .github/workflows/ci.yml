@@ -6,14 +6,13 @@ on:
   pull_request:
     branches: ["main"]
 
-# 🔥 IMPORTANT FIX (this solves your GHCR error)
 permissions:
   contents: read
   packages: write
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_OWNER: ${{ github.actor }}
+  IMAGE_OWNER: ${{ github.repository_owner }}
 
 jobs:
 
@@ -36,7 +35,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/user-service:latest backend/user-service
@@ -64,7 +67,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/order-service:latest backend/order-service
@@ -81,7 +88,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -92,7 +98,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/restaurant-service:latest backend/restaurant-service
@@ -109,7 +119,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -120,7 +129,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/admin-service:latest backend/admin-service
@@ -137,7 +150,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -148,7 +160,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/delivery-service:latest backend/delivery-service
@@ -165,7 +181,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -176,7 +191,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/api-gateway:latest backend/api-gateway
@@ -193,7 +212,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -204,7 +222,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/eureka-server:latest backend/eureka-server
