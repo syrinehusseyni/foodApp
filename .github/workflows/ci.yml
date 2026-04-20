@@ -6,13 +6,14 @@ on:
   pull_request:
     branches: ["main"]
 
+# ✅ FIX: required for GHCR push
 permissions:
   contents: read
   packages: write
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_OWNER: ${{ github.actor }}
+  IMAGE_OWNER: ${{ github.repository_owner }}
 
 jobs:
 
@@ -35,7 +36,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/user-service:latest backend/user-service
@@ -63,7 +64,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/order-service:latest backend/order-service
@@ -91,7 +92,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/restaurant-service:latest backend/restaurant-service
@@ -119,7 +120,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/admin-service:latest backend/admin-service
@@ -147,7 +148,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/delivery-service:latest backend/delivery-service
@@ -175,7 +176,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/api-gateway:latest backend/api-gateway
@@ -203,7 +204,7 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/eureka-server:latest backend/eureka-server
