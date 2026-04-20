@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: ["main"]
 
-# ✅ FIX: required for GHCR push
 permissions:
   contents: read
   packages: write
@@ -15,11 +14,10 @@ env:
   REGISTRY: ghcr.io
   IMAGE_OWNER: ${{ github.repository_owner }}
 
+# ============================================
+# USER SERVICE
+# ============================================
 jobs:
-
-  # ============================================
-  # USER SERVICE
-  # ============================================
   user-service:
     runs-on: ubuntu-latest
 
@@ -30,6 +28,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/user-service
@@ -42,6 +41,7 @@ jobs:
         run: docker build -t $REGISTRY/$IMAGE_OWNER/user-service:latest backend/user-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/user-service:latest
 
 
@@ -58,6 +58,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/order-service
@@ -70,6 +71,7 @@ jobs:
         run: docker build -t $REGISTRY/$IMAGE_OWNER/order-service:latest backend/order-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/order-service:latest
 
 
@@ -86,6 +88,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/restaurant-service
@@ -98,6 +101,7 @@ jobs:
         run: docker build -t $REGISTRY/$IMAGE_OWNER/restaurant-service:latest backend/restaurant-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/restaurant-service:latest
 
 
@@ -114,6 +118,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/admin-service
@@ -126,6 +131,7 @@ jobs:
         run: docker build -t $REGISTRY/$IMAGE_OWNER/admin-service:latest backend/admin-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/admin-service:latest
 
 
@@ -142,6 +148,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/delivery-service
@@ -154,6 +161,7 @@ jobs:
         run: docker build -t $REGISTRY/$IMAGE_OWNER/delivery-service:latest backend/delivery-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/delivery-service:latest
 
 
@@ -170,6 +178,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/api-gateway
@@ -182,6 +191,7 @@ jobs:
         run: docker build -t $REGISTRY/$IMAGE_OWNER/api-gateway:latest backend/api-gateway
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/api-gateway:latest
 
 
@@ -198,6 +208,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/eureka-server
@@ -210,11 +221,12 @@ jobs:
         run: docker build -t $REGISTRY/$IMAGE_OWNER/eureka-server:latest backend/eureka-server
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/eureka-server:latest
 
 
   # ============================================
-  # FRONTEND
+  # FRONTEND (BUILD ONLY)
   # ============================================
   frontend:
     runs-on: ubuntu-latest
