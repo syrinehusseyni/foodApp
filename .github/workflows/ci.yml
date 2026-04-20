@@ -7,7 +7,7 @@ on:
     branches: ["main"]
 
 # =========================
-# REQUIRED FOR GHCR
+# GHCR PERMISSIONS
 # =========================
 permissions:
   contents: read
@@ -18,7 +18,7 @@ permissions:
 # =========================
 env:
   REGISTRY: ghcr.io
-  IMAGE_OWNER: syrinehusseyni
+  IMAGE_OWNER: ${{ github.repository_owner }}
 
 jobs:
 
@@ -27,7 +27,6 @@ jobs:
   # ============================================
   user-service:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -41,7 +40,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u syrinehusseyni --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/user-service:latest backend/user-service
@@ -55,7 +58,6 @@ jobs:
   # ============================================
   order-service:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -69,7 +71,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u syrinehusseyni --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/order-service:latest backend/order-service
@@ -83,7 +89,6 @@ jobs:
   # ============================================
   restaurant-service:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -97,7 +102,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u syrinehusseyni --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/restaurant-service:latest backend/restaurant-service
@@ -111,7 +120,6 @@ jobs:
   # ============================================
   admin-service:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -125,7 +133,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u syrinehusseyni --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/admin-service:latest backend/admin-service
@@ -139,7 +151,6 @@ jobs:
   # ============================================
   delivery-service:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -153,7 +164,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u syrinehusseyni --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/delivery-service:latest backend/delivery-service
@@ -167,7 +182,6 @@ jobs:
   # ============================================
   api-gateway:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -181,7 +195,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u syrinehusseyni --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/api-gateway:latest backend/api-gateway
@@ -195,7 +213,6 @@ jobs:
   # ============================================
   eureka-server:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -209,7 +226,11 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u syrinehusseyni --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/eureka-server:latest backend/eureka-server
@@ -223,7 +244,6 @@ jobs:
   # ============================================
   frontend:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -240,7 +260,11 @@ jobs:
         run: npm run build
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u syrinehusseyni --password-stdin
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/frontend:latest frontend
