@@ -2,24 +2,32 @@ name: Food Delivery Microservices CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 # =========================
-# GHCR PERMISSIONS (REQUIRED)
+# REQUIRED FOR GHCR
 # =========================
 permissions:
   contents: read
   packages: write
 
+# =========================
+# GLOBAL VARIABLES
+# =========================
+env:
+  REGISTRY: ghcr.io
+  IMAGE_OWNER: syrinehusseyni
+
 jobs:
 
-  # =========================
+  # ============================================
   # USER SERVICE
-  # =========================
+  # ============================================
   user-service:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -28,26 +36,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build User Service
+      - name: Build JAR
         working-directory: backend/user-service
-        run: mvn clean install
-
-      - name: Build Docker image
-        working-directory: backend/user-service
-        run: docker build -t ghcr.io/syrinehusseyni/user-service:latest .
+        run: mvn clean package -DskipTests
 
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push Docker image
-        run: docker push ghcr.io/syrinehusseyni/user-service:latest
+      - name: Build Docker Image
+        run: docker build -t $REGISTRY/$IMAGE_OWNER/user-service:latest backend/user-service
+
+      - name: Push Docker Image
+        run: docker push $REGISTRY/$IMAGE_OWNER/user-service:latest
 
 
-  # =========================
+  # ============================================
   # ORDER SERVICE
-  # =========================
+  # ============================================
   order-service:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -56,26 +64,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build Order Service
+      - name: Build JAR
         working-directory: backend/order-service
-        run: mvn clean install
-
-      - name: Build Docker image
-        working-directory: backend/order-service
-        run: docker build -t ghcr.io/syrinehusseyni/order-service:latest .
+        run: mvn clean package -DskipTests
 
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push Docker image
-        run: docker push ghcr.io/syrinehusseyni/order-service:latest
+      - name: Build Docker Image
+        run: docker build -t $REGISTRY/$IMAGE_OWNER/order-service:latest backend/order-service
+
+      - name: Push Docker Image
+        run: docker push $REGISTRY/$IMAGE_OWNER/order-service:latest
 
 
-  # =========================
+  # ============================================
   # RESTAURANT SERVICE
-  # =========================
+  # ============================================
   restaurant-service:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -84,26 +92,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build Restaurant Service
+      - name: Build JAR
         working-directory: backend/restaurant-service
-        run: mvn clean install
-
-      - name: Build Docker image
-        working-directory: backend/restaurant-service
-        run: docker build -t ghcr.io/syrinehusseyni/restaurant-service:latest .
+        run: mvn clean package -DskipTests
 
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push Docker image
-        run: docker push ghcr.io/syrinehusseyni/restaurant-service:latest
+      - name: Build Docker Image
+        run: docker build -t $REGISTRY/$IMAGE_OWNER/restaurant-service:latest backend/restaurant-service
+
+      - name: Push Docker Image
+        run: docker push $REGISTRY/$IMAGE_OWNER/restaurant-service:latest
 
 
-  # =========================
+  # ============================================
   # ADMIN SERVICE
-  # =========================
+  # ============================================
   admin-service:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -112,26 +120,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build Admin Service
+      - name: Build JAR
         working-directory: backend/admin-service
-        run: mvn clean install
-
-      - name: Build Docker image
-        working-directory: backend/admin-service
-        run: docker build -t ghcr.io/syrinehusseyni/admin-service:latest .
+        run: mvn clean package -DskipTests
 
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push Docker image
-        run: docker push ghcr.io/syrinehusseyni/admin-service:latest
+      - name: Build Docker Image
+        run: docker build -t $REGISTRY/$IMAGE_OWNER/admin-service:latest backend/admin-service
+
+      - name: Push Docker Image
+        run: docker push $REGISTRY/$IMAGE_OWNER/admin-service:latest
 
 
-  # =========================
+  # ============================================
   # DELIVERY SERVICE
-  # =========================
+  # ============================================
   delivery-service:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -140,26 +148,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build Delivery Service
+      - name: Build JAR
         working-directory: backend/delivery-service
-        run: mvn clean install
-
-      - name: Build Docker image
-        working-directory: backend/delivery-service
-        run: docker build -t ghcr.io/syrinehusseyni/delivery-service:latest .
+        run: mvn clean package -DskipTests
 
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push Docker image
-        run: docker push ghcr.io/syrinehusseyni/delivery-service:latest
+      - name: Build Docker Image
+        run: docker build -t $REGISTRY/$IMAGE_OWNER/delivery-service:latest backend/delivery-service
+
+      - name: Push Docker Image
+        run: docker push $REGISTRY/$IMAGE_OWNER/delivery-service:latest
 
 
-  # =========================
+  # ============================================
   # API GATEWAY
-  # =========================
+  # ============================================
   api-gateway:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -168,26 +176,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build API Gateway
+      - name: Build JAR
         working-directory: backend/api-gateway
-        run: mvn clean install
-
-      - name: Build Docker image
-        working-directory: backend/api-gateway
-        run: docker build -t ghcr.io/syrinehusseyni/api-gateway:latest .
+        run: mvn clean package -DskipTests
 
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push Docker image
-        run: docker push ghcr.io/syrinehusseyni/api-gateway:latest
+      - name: Build Docker Image
+        run: docker build -t $REGISTRY/$IMAGE_OWNER/api-gateway:latest backend/api-gateway
+
+      - name: Push Docker Image
+        run: docker push $REGISTRY/$IMAGE_OWNER/api-gateway:latest
 
 
-  # =========================
+  # ============================================
   # EUREKA SERVER
-  # =========================
+  # ============================================
   eureka-server:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -196,26 +204,26 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build Eureka Server
+      - name: Build JAR
         working-directory: backend/eureka-server
-        run: mvn clean install
-
-      - name: Build Docker image
-        working-directory: backend/eureka-server
-        run: docker build -t ghcr.io/syrinehusseyni/eureka-server:latest .
+        run: mvn clean package -DskipTests
 
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push Docker image
-        run: docker push ghcr.io/syrinehusseyni/eureka-server:latest
+      - name: Build Docker Image
+        run: docker build -t $REGISTRY/$IMAGE_OWNER/eureka-server:latest backend/eureka-server
+
+      - name: Push Docker Image
+        run: docker push $REGISTRY/$IMAGE_OWNER/eureka-server:latest
 
 
-  # =========================
+  # ============================================
   # FRONTEND
-  # =========================
+  # ============================================
   frontend:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -231,12 +239,11 @@ jobs:
         working-directory: frontend
         run: npm run build
 
-      - name: Build Docker image
-        working-directory: frontend
-        run: docker build -t ghcr.io/syrinehusseyni/frontend:latest .
-
       - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Push Docker image
-        run: docker push ghcr.io/syrinehusseyni/frontend:latest
+      - name: Build Docker Image
+        run: docker build -t $REGISTRY/$IMAGE_OWNER/frontend:latest frontend
+
+      - name: Push Docker Image
+        run: docker push $REGISTRY/$IMAGE_OWNER/frontend:latest
