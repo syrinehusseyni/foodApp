@@ -6,14 +6,13 @@ on:
   pull_request:
     branches: ["main"]
 
-# 🔥 IMPORTANT FIX (this solves your GHCR error)
 permissions:
   contents: read
   packages: write
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_OWNER: ${{ github.actor }}
+  IMAGE_OWNER: ${{ github.repository_owner }}
 
 jobs:
 
@@ -30,18 +29,20 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/user-service
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/user-service:latest backend/user-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/user-service:latest
 
 
@@ -58,18 +59,20 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/order-service
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/order-service:latest backend/order-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/order-service:latest
 
 
@@ -86,18 +89,20 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/restaurant-service
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/restaurant-service:latest backend/restaurant-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/restaurant-service:latest
 
 
@@ -114,18 +119,20 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/admin-service
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/admin-service:latest backend/admin-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/admin-service:latest
 
 
@@ -142,18 +149,20 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/delivery-service
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/delivery-service:latest backend/delivery-service
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/delivery-service:latest
 
 
@@ -170,18 +179,20 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/api-gateway
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/api-gateway:latest backend/api-gateway
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/api-gateway:latest
 
 
@@ -198,23 +209,25 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
 
       - name: Build JAR
         working-directory: backend/eureka-server
         run: mvn clean package -DskipTests
 
       - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
       - name: Build Docker Image
         run: docker build -t $REGISTRY/$IMAGE_OWNER/eureka-server:latest backend/eureka-server
 
       - name: Push Docker Image
+        if: github.event_name == 'push'
         run: docker push $REGISTRY/$IMAGE_OWNER/eureka-server:latest
 
 
   # ============================================
-  # FRONTEND
+  # FRONTEND (BUILD ONLY)
   # ============================================
   frontend:
     runs-on: ubuntu-latest
