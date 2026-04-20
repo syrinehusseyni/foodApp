@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# =========================
+# GHCR PERMISSIONS (REQUIRED)
+# =========================
+permissions:
+  contents: read
+  packages: write
+
 jobs:
 
   # =========================
@@ -25,6 +32,16 @@ jobs:
         working-directory: backend/user-service
         run: mvn clean install
 
+      - name: Build Docker image
+        working-directory: backend/user-service
+        run: docker build -t ghcr.io/syrinehusseyni/user-service:latest .
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image
+        run: docker push ghcr.io/syrinehusseyni/user-service:latest
+
 
   # =========================
   # ORDER SERVICE
@@ -42,6 +59,16 @@ jobs:
       - name: Build Order Service
         working-directory: backend/order-service
         run: mvn clean install
+
+      - name: Build Docker image
+        working-directory: backend/order-service
+        run: docker build -t ghcr.io/syrinehusseyni/order-service:latest .
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image
+        run: docker push ghcr.io/syrinehusseyni/order-service:latest
 
 
   # =========================
@@ -61,6 +88,16 @@ jobs:
         working-directory: backend/restaurant-service
         run: mvn clean install
 
+      - name: Build Docker image
+        working-directory: backend/restaurant-service
+        run: docker build -t ghcr.io/syrinehusseyni/restaurant-service:latest .
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image
+        run: docker push ghcr.io/syrinehusseyni/restaurant-service:latest
+
 
   # =========================
   # ADMIN SERVICE
@@ -78,6 +115,16 @@ jobs:
       - name: Build Admin Service
         working-directory: backend/admin-service
         run: mvn clean install
+
+      - name: Build Docker image
+        working-directory: backend/admin-service
+        run: docker build -t ghcr.io/syrinehusseyni/admin-service:latest .
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image
+        run: docker push ghcr.io/syrinehusseyni/admin-service:latest
 
 
   # =========================
@@ -97,6 +144,16 @@ jobs:
         working-directory: backend/delivery-service
         run: mvn clean install
 
+      - name: Build Docker image
+        working-directory: backend/delivery-service
+        run: docker build -t ghcr.io/syrinehusseyni/delivery-service:latest .
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image
+        run: docker push ghcr.io/syrinehusseyni/delivery-service:latest
+
 
   # =========================
   # API GATEWAY
@@ -114,6 +171,16 @@ jobs:
       - name: Build API Gateway
         working-directory: backend/api-gateway
         run: mvn clean install
+
+      - name: Build Docker image
+        working-directory: backend/api-gateway
+        run: docker build -t ghcr.io/syrinehusseyni/api-gateway:latest .
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image
+        run: docker push ghcr.io/syrinehusseyni/api-gateway:latest
 
 
   # =========================
@@ -133,9 +200,19 @@ jobs:
         working-directory: backend/eureka-server
         run: mvn clean install
 
+      - name: Build Docker image
+        working-directory: backend/eureka-server
+        run: docker build -t ghcr.io/syrinehusseyni/eureka-server:latest .
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image
+        run: docker push ghcr.io/syrinehusseyni/eureka-server:latest
+
 
   # =========================
-  # FRONTEND (VITE FIXED NODE 20+)
+  # FRONTEND
   # =========================
   frontend:
     runs-on: ubuntu-latest
@@ -144,7 +221,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20   # ✅ FIXED (Vite requirement)
+          node-version: 20
 
       - name: Install dependencies
         working-directory: frontend
@@ -153,3 +230,13 @@ jobs:
       - name: Build frontend
         working-directory: frontend
         run: npm run build
+
+      - name: Build Docker image
+        working-directory: frontend
+        run: docker build -t ghcr.io/syrinehusseyni/frontend:latest .
+
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image
+        run: docker push ghcr.io/syrinehusseyni/frontend:latest
